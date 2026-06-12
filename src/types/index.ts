@@ -19,6 +19,7 @@ export type EmotionType = 'anxious' | 'sad' | 'tired' | 'angry' | 'confused' | '
 
 export interface CollapsePost {
   id: string
+  circleId: string
   content: string
   emotion: EmotionType
   visibility: 'all' | 'anonymous' | 'friends'

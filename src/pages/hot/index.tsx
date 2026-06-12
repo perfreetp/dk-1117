@@ -1,19 +1,30 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Text, Image, ScrollView } from '@tarojs/components'
 import styles from './index.module.scss'
-import { mockPosts, mockWeeklySummary, emotionLabels } from '@/data/mock'
+import { mockWeeklySummary, emotionLabels } from '@/data/mock'
+import { storage } from '@/utils/storage'
 import type { CollapsePost, EmotionType } from '@/types'
 
 const HotPage: React.FC = () => {
-  const [posts, setPosts] = useState<CollapsePost[]>(mockPosts)
+  const [posts, setPosts] = useState<CollapsePost[]>([])
 
-  const sortedPosts = [...posts].sort((a, b) => b.hugs - a.hugs)
+  useEffect(() => {
+    const storedPosts = storage.getPosts<CollapsePost>()
+    if (storedPosts.length > 0) {
+      setPosts(storedPosts)
+    }
+  }, [])
+
+  const publicPosts = posts.filter(post => post.visibility !== 'friends')
+  const sortedPosts = [...publicPosts].sort((a, b) => b.hugs - a.hugs)
   const topPosts = sortedPosts.slice(0, 5)
 
   const handleHug = (postId: string) => {
-    setPosts(posts.map(post => 
+    const updatedPosts = posts.map(post => 
       post.id === postId ? { ...post, hugs: post.hugs + 1 } : post
-    ))
+    )
+    setPosts(updatedPosts)
+    storage.setPosts(updatedPosts)
   }
 
   const getRankClass = (index: number) => {
@@ -99,11 +110,11 @@ const HotPage: React.FC = () => {
           <Text className={styles.weeklyTitle}>📊 每周报告</Text>
           <View className={styles.weeklyStats}>
             <View className={styles.weeklyStat}>
-              <Text className={styles.weeklyStatValue}>{mockWeeklySummary.totalPosts}</Text>
+              <Text className={styles.weeklyStatValue}>{publicPosts.length}</Text>
               <Text className={styles.weeklyStatLabel}>崩溃次数</Text>
             </View>
             <View className={styles.weeklyStat}>
-              <Text className={styles.weeklyStatValue}>{mockWeeklySummary.totalHugs}</Text>
+              <Text className={styles.weeklyStatValue}>{publicPosts.reduce((sum, p) => sum + p.hugs, 0)}</Text>
               <Text className={styles.weeklyStatLabel}>收到抱抱</Text>
             </View>
             <View className={styles.weeklyStat}>
@@ -126,6 +137,7 @@ const HotPage: React.FC = () => {
                 <View className={styles.hotPostHeader}>
                   <Image className={styles.hotPostAvatar} src="https://picsum.photos/id/64/200/200" mode="aspectFill" />
                   <Text className={styles.hotPostAuthor}>{post.authorNickname}</Text>
+                  {post.visibility === 'anonymous' && <Text className={styles.hotPostAnonymous}>匿名</Text>}
                 </View>
                 <Text className={styles.hotPostContent}>{post.content}</Text>
                 <View className={styles.hotPostTags}>

@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Text, Textarea } from '@tarojs/components'
 import styles from './index.module.scss'
-import type { EmotionType } from '@/types'
-import { emotionLabels } from '@/data/mock'
+import { storage } from '@/utils/storage'
+import type { EmotionType, CollapsePost } from '@/types'
+import { emotionLabels, mockUser } from '@/data/mock'
 
 const VoicePage: React.FC = () => {
   const [content, setContent] = useState('')
@@ -12,6 +13,19 @@ const VoicePage: React.FC = () => {
   const [walkInvitation, setWalkInvitation] = useState(false)
   const [showPreview, setShowPreview] = useState(false)
   const [showWarning, setShowWarning] = useState(false)
+  const [activeCircle, setActiveCircle] = useState<string>('')
+
+  useEffect(() => {
+    const circle = storage.getActiveCircle()
+    if (circle) {
+      setActiveCircle(circle)
+    } else {
+      const circles = storage.getCircles<{ id: string }>()
+      if (circles.length > 0) {
+        setActiveCircle(circles[0].id)
+      }
+    }
+  }, [])
 
   const emotions: { key: EmotionType; label: string }[] = [
     { key: 'anxious', label: '焦虑' },
@@ -50,6 +64,27 @@ const VoicePage: React.FC = () => {
   }
 
   const handleConfirmSubmit = () => {
+    const posts = storage.getPosts<CollapsePost>()
+    
+    const newPost: CollapsePost = {
+      id: `post-${Date.now()}`,
+      circleId: activeCircle,
+      content,
+      emotion,
+      visibility,
+      hugs: 0,
+      isTop: false,
+      needCompanion,
+      walkInvitation,
+      createdAt: new Date().toLocaleString(),
+      authorId: mockUser.id,
+      authorNickname: visibility === 'anonymous' ? '匿名用户' : mockUser.nickname,
+      isAuthor: true
+    }
+    
+    const updatedPosts = [newPost, ...posts]
+    storage.setPosts(updatedPosts)
+    
     Taro.showToast({ title: '发布成功', icon: 'success' })
     setShowPreview(false)
     setContent('')
@@ -63,7 +98,7 @@ const VoicePage: React.FC = () => {
     switch (visibility) {
       case 'anonymous': return '匿名用户'
       case 'friends': return '仅好友可见'
-      default: return '我'
+      default: return mockUser.nickname
     }
   }
 
@@ -151,6 +186,7 @@ const VoicePage: React.FC = () => {
                 </View>
                 {needCompanion && <View className={styles.previewTag}>需要陪伴</View>}
                 {walkInvitation && <View className={styles.previewTag}>散步邀约</View>}
+                {visibility === 'friends' && <View className={styles.previewTag}>仅好友可见</View>}
               </View>
             </View>
             <View className={styles.previewActions}>

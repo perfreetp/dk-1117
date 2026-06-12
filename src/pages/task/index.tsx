@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Text, ScrollView, Input, Textarea } from '@tarojs/components'
 import styles from './index.module.scss'
 import TaskCard from '@/components/TaskCard'
-import { mockTasks } from '@/data/mock'
+import { mockTasks, mockUser } from '@/data/mock'
+import { storage } from '@/utils/storage'
 import type { Task } from '@/types'
 
 const TaskPage: React.FC = () => {
-  const [tasks, setTasks] = useState<Task[]>(mockTasks)
+  const [tasks, setTasks] = useState<Task[]>([])
   const [activeTab, setActiveTab] = useState<'all' | 'available' | 'claimed'>('all')
   const [showModal, setShowModal] = useState(false)
   const [newTask, setNewTask] = useState({
@@ -15,6 +16,16 @@ const TaskPage: React.FC = () => {
     type: 'comfort' as 'comfort' | 'walk' | 'listen' | 'help',
     reward: 5
   })
+
+  useEffect(() => {
+    const storedTasks = storage.getTasks<Task>()
+    if (storedTasks.length > 0) {
+      setTasks(storedTasks)
+    } else {
+      setTasks(mockTasks)
+      storage.setTasks(mockTasks)
+    }
+  }, [])
 
   const tabs = [
     { key: 'all' as const, label: '全部' },
@@ -39,16 +50,20 @@ const TaskPage: React.FC = () => {
   const completedCount = tasks.filter(t => t.status === 'completed').length
 
   const handleClaim = (taskId: string) => {
-    setTasks(tasks.map(task => 
-      task.id === taskId ? { ...task, status: 'claimed' as const, claimedAt: new Date().toLocaleString() } : task
-    ))
+    const updatedTasks = tasks.map(task => 
+      task.id === taskId ? { ...task, status: 'claimed' as const, claimedAt: new Date().toLocaleString(), claimedBy: mockUser.id } : task
+    )
+    setTasks(updatedTasks)
+    storage.setTasks(updatedTasks)
     Taro.showToast({ title: '领取成功', icon: 'success' })
   }
 
   const handleComplete = (taskId: string) => {
-    setTasks(tasks.map(task => 
+    const updatedTasks = tasks.map(task => 
       task.id === taskId ? { ...task, status: 'completed' as const, completedAt: new Date().toLocaleString() } : task
-    ))
+    )
+    setTasks(updatedTasks)
+    storage.setTasks(updatedTasks)
     Taro.showToast({ title: '完成成功', icon: 'success' })
   }
 
@@ -61,11 +76,13 @@ const TaskPage: React.FC = () => {
       id: `task-${Date.now()}`,
       ...newTask,
       status: 'available',
-      authorId: 'user-001',
-      authorNickname: '小星星',
+      authorId: mockUser.id,
+      authorNickname: mockUser.nickname,
       createdAt: new Date().toLocaleString()
     }
-    setTasks([task, ...tasks])
+    const updatedTasks = [task, ...tasks]
+    setTasks(updatedTasks)
+    storage.setTasks(updatedTasks)
     setShowModal(false)
     setNewTask({ title: '', description: '', type: 'comfort', reward: 5 })
     Taro.showToast({ title: '发布成功', icon: 'success' })

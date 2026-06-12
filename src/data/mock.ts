@@ -52,6 +52,7 @@ export const mockCircles: Circle[] = [
 export const mockPosts: CollapsePost[] = [
   {
     id: 'post-001',
+    circleId: 'circle-001',
     content: '今天的实验又失败了，已经是第三次了。感觉自己好笨，是不是不适合做科研...',
     emotion: 'sad',
     visibility: 'all',
@@ -66,6 +67,7 @@ export const mockPosts: CollapsePost[] = [
   },
   {
     id: 'post-002',
+    circleId: 'circle-001',
     content: '论文deadline快到了，可是数据还没跑完。好焦虑啊，每天都睡不着觉',
     emotion: 'anxious',
     visibility: 'anonymous',
@@ -80,6 +82,7 @@ export const mockPosts: CollapsePost[] = [
   },
   {
     id: 'post-003',
+    circleId: 'circle-001',
     content: '和室友吵架了，明明是很小的事情，但就是控制不住情绪。现在好后悔...',
     emotion: 'lonely',
     visibility: 'friends',
@@ -94,6 +97,7 @@ export const mockPosts: CollapsePost[] = [
   },
   {
     id: 'post-004',
+    circleId: 'circle-002',
     content: '连续复习了一周，感觉脑子已经转不动了。好想躺平啊',
     emotion: 'tired',
     visibility: 'all',
@@ -108,6 +112,7 @@ export const mockPosts: CollapsePost[] = [
   },
   {
     id: 'post-005',
+    circleId: 'circle-002',
     content: '导师又布置了新任务，感觉自己永远做不完。压力好大...',
     emotion: 'angry',
     visibility: 'all',
@@ -122,6 +127,7 @@ export const mockPosts: CollapsePost[] = [
   },
   {
     id: 'post-006',
+    circleId: 'circle-003',
     content: '不知道自己想要什么，感觉很迷茫。看着周围的人都很明确，只有我还在原地',
     emotion: 'confused',
     visibility: 'anonymous',
@@ -136,6 +142,7 @@ export const mockPosts: CollapsePost[] = [
   },
   {
     id: 'post-007',
+    circleId: 'circle-003',
     content: '今天收到了心仪公司的offer！努力终于有回报了！',
     emotion: 'happy',
     visibility: 'all',
