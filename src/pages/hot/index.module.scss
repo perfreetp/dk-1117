@@ -1,0 +1,262 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding: $page-padding;
+  padding-bottom: 180rpx;
+}
+
+.title {
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-sm;
+}
+
+.subtitle {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  margin-bottom: $spacing-xl;
+}
+
+.section {
+  margin-bottom: $spacing-xl;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-md;
+}
+
+.sectionTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.sectionMore {
+  font-size: $font-size-sm;
+  color: $color-primary;
+}
+
+.rankingCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.rankingItem {
+  display: flex;
+  align-items: center;
+  padding: $spacing-sm 0;
+}
+
+.rankingRank {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: $radius-sm;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  margin-right: $spacing-md;
+}
+
+.rankingRank.first {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  color: $color-text-white;
+}
+
+.rankingRank.second {
+  background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%);
+  color: $color-text-white;
+}
+
+.rankingRank.third {
+  background: linear-gradient(135deg, #fdba74 0%, #f97316 100%);
+  color: $color-text-white;
+}
+
+.rankingRank.other {
+  background: $color-bg-hover;
+  color: $color-text-secondary;
+}
+
+.rankingContent {
+  flex: 1;
+}
+
+.rankingText {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  @include text-ellipsis-multi(2);
+  line-height: $line-height-normal;
+}
+
+.rankingHugs {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: $spacing-xs;
+}
+
+.rankingHugsIcon {
+  margin-right: $spacing-xs;
+}
+
+.emotionStats {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.emotionBar {
+  margin-bottom: $spacing-md;
+}
+
+.emotionBar:last-child {
+  margin-bottom: 0;
+}
+
+.emotionBarHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-xs;
+}
+
+.emotionBarLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.emotionBarValue {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+}
+
+.emotionBarProgress {
+  height: 12rpx;
+  background: $color-bg-hover;
+  border-radius: $radius-round;
+  overflow: hidden;
+}
+
+.emotionBarFill {
+  height: 100%;
+  border-radius: $radius-round;
+  transition: width 0.3s ease;
+}
+
+.weeklySummary {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  color: $color-text-white;
+}
+
+.weeklyTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  margin-bottom: $spacing-lg;
+}
+
+.weeklyStats {
+  display: flex;
+  justify-content: space-around;
+}
+
+.weeklyStat {
+  text-align: center;
+}
+
+.weeklyStatValue {
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-bold;
+}
+
+.weeklyStatLabel {
+  font-size: $font-size-xs;
+  opacity: 0.8;
+  margin-top: $spacing-xs;
+}
+
+.hotPosts {
+  margin-top: $spacing-md;
+}
+
+.hotPostCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+}
+
+.hotPostHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: $spacing-md;
+}
+
+.hotPostAvatar {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: $radius-round;
+}
+
+.hotPostAuthor {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-left: $spacing-sm;
+}
+
+.hotPostContent {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  line-height: $line-height-loose;
+}
+
+.hotPostTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+  margin-top: $spacing-md;
+}
+
+.hotPostTag {
+  font-size: $font-size-xs;
+  padding: $spacing-xs $spacing-sm;
+  border-radius: $radius-sm;
+  background: $color-bg-hover;
+  color: $color-text-secondary;
+}
+
+.hotPostActions {
+  display: flex;
+  margin-top: $spacing-md;
+  padding-top: $spacing-md;
+  border-top: 2rpx solid $color-divider;
+}
+
+.hotPostAction {
+  display: flex;
+  align-items: center;
+  margin-right: $spacing-xl;
+}
+
+.hotPostActionIcon {
+  font-size: $font-size-md;
+}
+
+.hotPostActionText {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-left: $spacing-xs;
+}

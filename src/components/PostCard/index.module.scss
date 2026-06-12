@@ -1,0 +1,155 @@
+@use '@/styles/variables.scss' as *;
+
+.card {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+  position: relative;
+}
+
+.topTag {
+  position: absolute;
+  top: 0;
+  left: $spacing-lg;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  color: $color-text-white;
+  font-size: $font-size-xs;
+  padding: $spacing-xs $spacing-sm;
+  border-radius: 0 0 $radius-sm $radius-sm;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+}
+
+.avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: $radius-round;
+}
+
+.authorInfo {
+  flex: 1;
+  margin-left: $spacing-md;
+}
+
+.authorName {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+}
+
+.time {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: $spacing-xs;
+}
+
+.anonymous {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  background: $color-bg-hover;
+  padding: $spacing-xs $spacing-sm;
+  border-radius: $radius-sm;
+}
+
+.content {
+  margin-top: $spacing-md;
+}
+
+.text {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  line-height: $line-height-loose;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+  margin-top: $spacing-md;
+}
+
+.emotionTag {
+  font-size: $font-size-xs;
+  padding: $spacing-xs $spacing-sm;
+  border-radius: $radius-sm;
+}
+
+.companionTag {
+  font-size: $font-size-xs;
+  padding: $spacing-xs $spacing-sm;
+  border-radius: $radius-sm;
+  background: rgba(248, 113, 113, 0.1);
+  color: $color-emotion-anxious;
+}
+
+.walkTag {
+  font-size: $font-size-xs;
+  padding: $spacing-xs $spacing-sm;
+  border-radius: $radius-sm;
+  background: rgba(129, 140, 248, 0.1);
+  color: $color-info;
+}
+
+.actions {
+  display: flex;
+  margin-top: $spacing-md;
+  padding-top: $spacing-md;
+  border-top: 2rpx solid $color-divider;
+}
+
+.actionBtn {
+  display: flex;
+  align-items: center;
+  margin-right: $spacing-xl;
+}
+
+.hugIcon, .commentIcon {
+  font-size: $font-size-lg;
+}
+
+.actionText {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-left: $spacing-xs;
+}
+
+.actionSheet {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: flex-end;
+  z-index: 100;
+}
+
+.actionContent {
+  background: $color-bg-card;
+  width: 100%;
+  border-radius: $radius-xl $radius-xl 0 0;
+  padding: $spacing-lg;
+}
+
+.actionItem {
+  padding: $spacing-lg;
+  text-align: center;
+  font-size: $font-size-md;
+  color: $color-error;
+  background: $color-bg-hover;
+  border-radius: $radius-md;
+}
+
+.cancel {
+  padding: $spacing-lg;
+  text-align: center;
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+  margin-top: $spacing-sm;
+}
