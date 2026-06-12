@@ -38,6 +38,11 @@ const PostCard: React.FC<PostCardProps> = ({ post, onHug, onWithdraw }) => {
         <View className={styles.emotionTag} style={{ backgroundColor: emotion.color + '20', color: emotion.color }}>
           {emotion.label}
         </View>
+        {post.visibility === 'friends' && (
+          <View className={styles.friendsTag}>
+            仅好友
+          </View>
+        )}
         {post.needCompanion && (
           <View className={styles.companionTag}>
             需要陪伴

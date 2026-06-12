@@ -24,10 +24,13 @@ const HomePage: React.FC = () => {
     const storedPosts = storage.getPosts<CollapsePost>()
     const storedActiveCircle = storage.getActiveCircle()
     
+    let initialCircles: Circle[]
+    let initialActiveCircle: string
+    
     if (storedCircles.length > 0) {
-      setCircles(storedCircles)
+      initialCircles = storedCircles
     } else {
-      setCircles(mockCircles)
+      initialCircles = mockCircles
       storage.setCircles(mockCircles)
     }
     
@@ -38,12 +41,18 @@ const HomePage: React.FC = () => {
       storage.setPosts(mockPosts)
     }
     
-    if (storedActiveCircle) {
-      setActiveCircle(storedActiveCircle)
-    } else if (circles.length > 0) {
-      setActiveCircle(circles[0].id)
-      storage.setActiveCircle(circles[0].id)
+    setCircles(initialCircles)
+    
+    if (storedActiveCircle && initialCircles.some(c => c.id === storedActiveCircle)) {
+      initialActiveCircle = storedActiveCircle
+    } else if (initialCircles.length > 0) {
+      initialActiveCircle = initialCircles[0].id
+    } else {
+      initialActiveCircle = ''
     }
+    
+    setActiveCircle(initialActiveCircle)
+    storage.setActiveCircle(initialActiveCircle)
   }, [])
 
   const handleCircleClick = (circleId: string) => {
@@ -99,18 +108,23 @@ const HomePage: React.FC = () => {
       return
     }
     
-    const targetCircle = mockCircles.find(c => c.code === joinCode.toUpperCase())
+    const targetCode = joinCode.toUpperCase()
     
-    if (targetCircle) {
-      const exists = circles.some(c => c.id === targetCircle.id)
-      if (exists) {
-        Taro.showToast({ title: '您已加入该圈子', icon: 'none' })
-        return
-      }
-      
+    const existingCircle = circles.find(c => c.code === targetCode)
+    if (existingCircle) {
+      Taro.showToast({ title: '您已加入该圈子', icon: 'none' })
+      setActiveCircle(existingCircle.id)
+      storage.setActiveCircle(existingCircle.id)
+      setShowModal(false)
+      setJoinCode('')
+      return
+    }
+    
+    const mockCircle = mockCircles.find(c => c.code === targetCode)
+    if (mockCircle) {
       const newCircle: Circle = {
-        ...targetCircle,
-        members: [...targetCircle.members, { ...mockUser, role: 'member' }]
+        ...mockCircle,
+        members: [...mockCircle.members, { ...mockUser, role: 'member' }]
       }
       
       const updatedCircles = [...circles, newCircle]
@@ -121,28 +135,32 @@ const HomePage: React.FC = () => {
       setShowModal(false)
       setJoinCode('')
       Taro.showToast({ title: '加入成功', icon: 'success' })
-    } else {
-      Taro.showToast({ title: '邀请码错误', icon: 'none' })
+      return
     }
+    
+    Taro.showToast({ title: '邀请码错误', icon: 'none' })
   }
 
   const handlePin = (postId: string) => {
     const currentCircle = circles.find(c => c.id === activeCircle)
-    if (!currentCircle || currentCircle.members[0].id !== mockUser.id) {
-      return
-    }
+    if (!currentCircle) return
+    
+    const isAdmin = currentCircle.members.some(m => m.id === mockUser.id && m.role === 'admin')
+    if (!isAdmin) return
     
     const updatedPosts = posts.map(post => 
       post.id === postId ? { ...post, isTop: !post.isTop } : post
     )
     setPosts(updatedPosts)
     storage.setPosts(updatedPosts)
-    Taro.showToast({ title: post.find(p => p.id === postId)?.isTop ? '已取消置顶' : '已置顶', icon: 'success' })
+    
+    const targetPost = updatedPosts.find(p => p.id === postId)
+    const message = targetPost?.isTop ? '已置顶' : '已取消置顶'
+    Taro.showToast({ title: message, icon: 'success' })
   }
 
   const filteredPosts = posts.filter(post => {
-    if (!activeCircle) return true
-    if (post.visibility === 'friends') return false
+    if (!activeCircle) return false
     return post.circleId === activeCircle
   }).sort((a, b) => {
     if (a.isTop && !b.isTop) return -1
@@ -151,6 +169,7 @@ const HomePage: React.FC = () => {
   })
 
   const currentCircle = circles.find(c => c.id === activeCircle)
+  const isAdmin = currentCircle?.members.some(m => m.id === mockUser.id && m.role === 'admin')
 
   return (
     <ScrollView className={styles.page} scrollY>
@@ -182,18 +201,24 @@ const HomePage: React.FC = () => {
         <View className={styles.postsSection}>
           <Text className={styles.sectionTitle}>{currentCircle.name} - 最新动态</Text>
           <View className={styles.postsList}>
-            {filteredPosts.map(post => (
-              <View 
-                key={post.id} 
-                onLongPress={() => post.isAuthor && handlePin(post.id)}
-              >
-                <PostCard
-                  post={post}
-                  onHug={handleHug}
-                  onWithdraw={handleWithdraw}
-                />
+            {filteredPosts.length > 0 ? (
+              filteredPosts.map(post => (
+                <View 
+                  key={post.id} 
+                  onLongPress={() => isAdmin && handlePin(post.id)}
+                >
+                  <PostCard
+                    post={post}
+                    onHug={handleHug}
+                    onWithdraw={handleWithdraw}
+                  />
+                </View>
+              ))
+            ) : (
+              <View className={styles.emptyPosts}>
+                <Text className={styles.emptyText}>暂无动态</Text>
               </View>
-            ))}
+            )}
           </View>
         </View>
       )}

@@ -186,3 +186,13 @@
 .postsList {
   margin-top: $spacing-md;
 }
+
+.emptyPosts {
+  text-align: center;
+  padding: $spacing-xl * 2;
+}
+
+.emptyText {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}

@@ -95,6 +95,14 @@
   color: $color-info;
 }
 
+.friendsTag {
+  font-size: $font-size-xs;
+  padding: $spacing-xs $spacing-sm;
+  border-radius: $radius-sm;
+  background: rgba(167, 139, 250, 0.1);
+  color: $color-emotion-confused;
+}
+
 .actions {
   display: flex;
   margin-top: $spacing-md;
